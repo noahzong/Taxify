@@ -1,0 +1,25 @@
+# Ignore all .class files
+*.class
+
+# Ignore directory-specific settings
+bin/
+out/
+target/
+
+# IDE-specific ignores
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+
+# Ignore Maven local repository
+.m2/
+
+# Ignore Gradle files
+.gradle/
+build/
+
+# Ignore other system files
+*.DS_Store
+Thumbs.db
