@@ -7,6 +7,6 @@ public class Shuttle extends Vehicle {
 	
 	@Override
 	public int calculateCost() {
-		return 3*super.calculateCost()/2;
+		return 3*super.calculateCost();
 	}
 }

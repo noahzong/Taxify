@@ -66,4 +66,5 @@ public class Statistics implements IStatistics {
     public void updateBilling(int billing) {
         this.billing = this.billing + billing;
     }    
+    
 }

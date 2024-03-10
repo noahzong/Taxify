@@ -7,6 +7,6 @@ public class Taxi extends Vehicle {
 	
 	@Override
 	public int calculateCost() {
-		return 2*super.calculateCost();
+		return 4*super.calculateCost();
 	}
 }
