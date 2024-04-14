@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 public class Service implements IService {
     private IUser user;

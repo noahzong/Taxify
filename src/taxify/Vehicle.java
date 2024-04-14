@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 public abstract class Vehicle implements IVehicle {
     private int id;
@@ -9,6 +9,7 @@ public abstract class Vehicle implements IVehicle {
     private ILocation destination;
     private IStatistics statistics;
     private IRoute route;
+    private IDriver driver;
         
     public Vehicle(int id, ILocation location) {        
         this.id = id;
@@ -23,6 +24,11 @@ public abstract class Vehicle implements IVehicle {
     @Override
     public int getId() {
         return this.id;
+    }
+    
+    @Override
+    public boolean isPink() {
+    	return this.driver.getGender() == 'F';
     }
  
     @Override
@@ -58,6 +64,15 @@ public abstract class Vehicle implements IVehicle {
         this.destination = service.getPickupLocation();
         this.route = new Route(this.location, this.destination);        
         this.status = VehicleStatus.PICKUP;
+    }
+    
+    @Override
+    public IDriver getDriver() {
+    	return this.driver;
+    }
+    
+    public void setDriver(IDriver driver) {
+    	this.driver = driver;
     }
 
     @Override

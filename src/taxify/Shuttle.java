@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 public class Shuttle extends Vehicle {
 	public Shuttle(int id, ILocation location) {

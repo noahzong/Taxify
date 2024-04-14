@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 import java.util.ArrayList;
 import java.util.List;

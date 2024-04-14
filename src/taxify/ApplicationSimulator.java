@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 import java.util.List;
 
@@ -35,15 +35,20 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
             
             String.format("%-8s", vehicle.getClass().getSimpleName()) +
             String.format("%2s", vehicle.getId()) + " " +
+            //add driver statistics
+            "   Driver " +
+            String.format("%-4s", vehicle.getDriver().toString()) +
             String.format("%2s", vehicle.getStatistics().getServices()) + " services " + 
             String.format("%3s", vehicle.getStatistics().getDistance()) + " km. " +
             String.format("%3s", vehicle.getStatistics().getBilling()) + " eur. " +
             String.format("%2s", vehicle.getStatistics().getReviews()) + " reviews " +
             String.format("%-4s", vehicle.getStatistics().getStars()) + " stars";
+            
+            
         }
                 
         System.out.println(s);        
-    }    
+    }  
 
     @Override
     public void update() {
@@ -56,7 +61,12 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
 
     @Override
     public void requestService() {        
-        // find an available user and requests a service to the Taxi Company
+        requestService(ServiceType.NORMAL);
+    }
+    
+    @Override
+    public void requestService(ServiceType s) {        
+    	// find an available user and requests a service to the Taxi Company
 
         int index;
         
@@ -66,7 +76,7 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
             
         } while (this.users.get(index).getService());
         
-        this.company.provideService(this.users.get(index).getId());
+        this.company.provideService(this.users.get(index).getId(), s);
     }
     
     @Override
@@ -78,4 +88,5 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
     public void updateObserver(String message) {
         System.out.println(message);
     }
+
 }

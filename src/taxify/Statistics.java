@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 public class Statistics implements IStatistics {
     private int services;

@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 import java.util.List;
 
@@ -37,9 +37,17 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     }
         
     @Override
-    public boolean provideService(int user) {
+    public boolean provideService(int user, ServiceType s) {
         int userIndex = findUserIndex(user);        
-        int vehicleIndex = findFreeVehicle();
+        int vehicleIndex;
+        
+        if(s == ServiceType.PINK) {
+        	vehicleIndex = findFreePinkVehicle();
+        }
+        else {
+        	//If the user requests a silent ride, this doesn't change how the vehicle is found, as any vehicle can be silent
+        	vehicleIndex = findFreeVehicle();
+        }
         
         // if there is a free vehicle, assign a random pickup and drop-off location to the new service
         // the distance between the pickup and the drop-off location should be at least 3 blocks
@@ -65,11 +73,27 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
             // assign the new service to the vehicle
             
             this.vehicles.get(vehicleIndex).pickService(service);            
-             
-            notifyObserver("User " + this.users.get(userIndex).getId() + " requests a service from " + service.toString() + ", the ride is assigned to " +
-                           this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
-                           this.vehicles.get(vehicleIndex).getLocation().toString());
-            
+          
+            if(s == ServiceType.PINK) {
+            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a PINK service from " + service.toString() + ", the ride is assigned to " +
+                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
+                this.vehicles.get(vehicleIndex).getLocation().toString());
+            }
+            else if(s == ServiceType.SILENT) {
+            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a SILENT service from " + service.toString() + ", the ride is assigned to " +
+                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
+                this.vehicles.get(vehicleIndex).getLocation().toString());
+            }
+            else if(s == ServiceType.SHARED) {
+            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a SHARED service from " + service.toString() + ", the ride is assigned to " +
+                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
+                this.vehicles.get(vehicleIndex).getLocation().toString());
+            }
+            else {
+            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a NORMAL service from " + service.toString() + ", the ride is assigned to " +
+                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
+                this.vehicles.get(vehicleIndex).getLocation().toString());
+            }
             // update the counter of services
             
             this.totalServices++;
@@ -125,6 +149,19 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
             index = ApplicationLibrary.rand(this.vehicles.size());
             
         } while (!this.vehicles.get(index).isFree());
+
+        return index;
+    }
+    
+  //finds a free pink vehicle
+    private int findFreePinkVehicle() {
+    	int index;
+        
+        do {
+            
+            index = ApplicationLibrary.rand(this.vehicles.size());
+            
+        } while (!this.vehicles.get(index).isFree() || !this.vehicles.get(index).isPink());
 
         return index;
     }

@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 import java.util.Random;
 
@@ -7,16 +7,20 @@ public class ApplicationLibrary {
     private static final int MAP_WIDTH = 10;
     private static final int MAP_HEIGHT = 10;    
 
+  //these two methods were giving me bugs due to the int type casting
     public static int rand() {
         Random random = new Random();
         
-        return random.nextInt((int) System.currentTimeMillis());
+        //return random.nextInt((int) System.currentTimeMillis());
+        return random.nextInt();
     }
     
     public static int rand(int max) {
+    
         Random random = new Random();
 
-        return random.nextInt((int) System.currentTimeMillis()) % max;
+        //return random.nextInt((int) System.currentTimeMillis()) % max;
+        return random.nextInt(max);
     }
     
     public static int distance(ILocation a, ILocation b) {

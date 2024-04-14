@@ -1,4 +1,4 @@
-package taxify;
+package project1.src.taxify;
 
 import java.time.LocalDate;
 
@@ -12,7 +12,7 @@ public interface IUser {
     public boolean getService();
     public void setService(boolean service);
     public void setCompany(ITaxiCompany company);
-    public void requestService();
+    public void requestService(ServiceType s);
     public void rateService(IService service);
     public String toString();
 
