@@ -185,7 +185,7 @@ public abstract class Vehicle implements IVehicle {
 
     @Override
     public int calculateCost() {
-    	//if  a ride is shared, charge 1.5x the normal amount (as this is split between two people)
+    	//if  a ride is shared, charge 1.5x the normal amount (as this is split between two people so each pays only 75%)
     	if(this.sharedService != null) {
     		return this.service.calculateDistance() * 3 / 2;
     	}
