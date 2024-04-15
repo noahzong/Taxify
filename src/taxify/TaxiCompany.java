@@ -45,11 +45,11 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
         if(s == ServiceType.PINK) {
         	vehicleIndex = findFreePinkVehicle();
         }
+        
         else {
         	//If the user requests a silent ride, this doesn't change how the vehicle is found, as any vehicle can be silent
         	vehicleIndex = findFreeVehicle();
         }
-        
         // if there is a free vehicle, assign a random pickup and drop-off location to the new service
         // the distance between the pickup and the drop-off location should be at least 3 blocks
         
@@ -70,7 +70,12 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
             	vehicleIndex = findFreeSharedVehicle(origin);
             }
             if(vehicleIndex == -1 || s != ServiceType.SHARED) {
-            	vehicleIndex = findFreeVehicle();
+            	if(s == ServiceType.PINK) {
+            		vehicleIndex = findFreePinkVehicle();
+            	}
+            	else {//this includes silent vehicles too
+            		vehicleIndex = findFreeVehicle();
+            	}
             	//create a normal service
             	service = new Service(this.users.get(userIndex), origin, destination);
                 

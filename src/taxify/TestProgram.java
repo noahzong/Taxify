@@ -30,9 +30,9 @@ public class TestProgram {
     			nextServiceTime = random.nextInt(10)+1;
     			int serviceType = random.nextInt(4);
     			if(serviceType == 0) {simulator.requestService(ServiceType.PINK);}
-    			else if(serviceType == 1) {simulator.requestService(ServiceType.SHARED);}
-    			else if(serviceType == 2) {simulator.requestService(ServiceType.SILENT);}
-    			else {simulator.requestService(ServiceType.NORMAL);}
+    			//else if(serviceType == 1) {simulator.requestService(ServiceType.PINK);}
+    			//else if(serviceType == 2) {simulator.requestService(ServiceType.PINK);}
+    			//else {simulator.requestService(ServiceType.PINK);}
     		}
     			
     		counter++;
