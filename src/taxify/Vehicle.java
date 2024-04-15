@@ -4,6 +4,7 @@ public abstract class Vehicle implements IVehicle {
     private int id;
     private ITaxiCompany company;
     private IService service;
+    private IService sharedService;
     private VehicleStatus status;
     private ILocation location;
     private ILocation destination;
@@ -67,6 +68,16 @@ public abstract class Vehicle implements IVehicle {
     }
     
     @Override
+    public void pickSharedService(IService service) {
+        // pick a service, set destination to the service pickup location, and status to "pickup"
+        
+        this.sharedService = service;
+        this.destination = sharedService.getPickupLocation();
+        this.route = new Route(this.location, this.destination);        
+        this.status = VehicleStatus.PICKUP;
+    }
+    
+    @Override
     public IDriver getDriver() {
     	return this.driver;
     }
@@ -93,6 +104,7 @@ public abstract class Vehicle implements IVehicle {
         this.statistics.updateDistance(this.service.calculateDistance());
         this.statistics.updateServices();
         
+        
         // if the service is rated by the user, update statistics
         
         if (this.service.getStars() != 0) {
@@ -100,6 +112,14 @@ public abstract class Vehicle implements IVehicle {
             this.statistics.updateReviews();
         }
         
+        //if it was a shared service, add extra statistics
+        if(this.sharedService != null) {
+        	this.statistics.updateServices();
+        	if (this.service.getStars() != 0) {
+                this.statistics.updateStars(this.service.getStars());
+                this.statistics.updateReviews();
+            }
+        }
         // set service to null, and status to "free"
         
         this.service = null;
@@ -165,6 +185,10 @@ public abstract class Vehicle implements IVehicle {
 
     @Override
     public int calculateCost() {
+    	//if  a ride is shared, charge 1.5x the normal amount (as this is split between two people)
+    	if(this.sharedService != null) {
+    		return this.service.calculateDistance() * 3 / 2;
+    	}
         return this.service.calculateDistance();
     }
 

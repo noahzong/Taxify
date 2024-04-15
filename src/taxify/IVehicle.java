@@ -10,6 +10,7 @@ public interface IVehicle extends IMovable {
     public IStatistics getStatistics();
     public void setCompany(ITaxiCompany company);
     public void pickService(IService service);
+    public void pickSharedService(IService service);
     public IDriver getDriver();
     public void setDriver(IDriver d);
     public void startService();
@@ -19,5 +20,6 @@ public interface IVehicle extends IMovable {
     public boolean isFree();
     public int calculateCost();
     public String toString();
+	
     
 }

@@ -1,6 +1,7 @@
 package project1.src.taxify;
 
 import java.util.List;
+import java.util.Random;
 
 public class TaxiCompany implements ITaxiCompany, ISubject {
     private String name;
@@ -62,38 +63,56 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
                 
             } while (ApplicationLibrary.distance(origin, this.vehicles.get(vehicleIndex).getLocation()) < ApplicationLibrary.MINIMUM_DISTANCE);
             
+            
+            IService service;
+            //now that a origin is assigned, check for shared vehicles
+            if(s == ServiceType.SHARED) {
+            	vehicleIndex = findFreeSharedVehicle(origin);
+            }
+            if(vehicleIndex == -1 || s != ServiceType.SHARED) {
+            	vehicleIndex = findFreeVehicle();
+            	//create a normal service
+            	service = new Service(this.users.get(userIndex), origin, destination);
+                
+                // assign the new service to the vehicle
+                
+                this.vehicles.get(vehicleIndex).pickService(service);     
+            }
+            //if the find free shared vehicle method finds a vehicle, then create the service and add it to the vehicle
+            else {
+            	service = new Service(this.users.get(userIndex), origin, destination);
+            	this.vehicles.get(vehicleIndex).pickSharedService(service);
+            }
+            
             // update the user status
                        
             this.users.get(userIndex).setService(true);
-            
-            // create a service with the user, the pickup and the drop-off location
-
-            IService service = new Service(this.users.get(userIndex), origin, destination);
-            
-            // assign the new service to the vehicle
-            
-            this.vehicles.get(vehicleIndex).pickService(service);            
+             
           
-            if(s == ServiceType.PINK) {
-            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a PINK service from " + service.toString() + ", the ride is assigned to " +
-                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
-                this.vehicles.get(vehicleIndex).getLocation().toString());
+            // Determine the service type name
+            String serviceName = "NORMAL"; 
+            switch (s) {
+                case PINK:
+                    serviceName = "PINK";
+                    break;
+                case SILENT:
+                    serviceName = "SILENT";
+                    break;
+                case SHARED:
+                    serviceName = "SHARED";
+                    break;
             }
-            else if(s == ServiceType.SILENT) {
-            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a SILENT service from " + service.toString() + ", the ride is assigned to " +
-                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
+
+            String message = String.format("User %s requests a %s service from %s, the ride is assigned to %s %s at location %s",
+                this.users.get(userIndex).getId(),
+                serviceName,
+                service.toString(),
+                this.vehicles.get(vehicleIndex).getClass().getSimpleName(),
+                this.vehicles.get(vehicleIndex).getId(),
                 this.vehicles.get(vehicleIndex).getLocation().toString());
-            }
-            else if(s == ServiceType.SHARED) {
-            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a SHARED service from " + service.toString() + ", the ride is assigned to " +
-                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
-                this.vehicles.get(vehicleIndex).getLocation().toString());
-            }
-            else {
-            	notifyObserver("User " + this.users.get(userIndex).getId() + " requests a NORMAL service from " + service.toString() + ", the ride is assigned to " +
-                this.vehicles.get(vehicleIndex).getClass().getSimpleName() + " " + this.vehicles.get(vehicleIndex).getId() + " at location " +
-                this.vehicles.get(vehicleIndex).getLocation().toString());
-            }
+
+            // Notify observer
+            notifyObserver(message);
             // update the counter of services
             
             this.totalServices++;
@@ -105,9 +124,10 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
 
     @Override
     public void arrivedAtPickupLocation(IVehicle vehicle) {
-        // notify the observer a vehicle arrived at the pickup location
-    	notifyObserver("Vehicle arrived at the pickup location");
+        // Notify the observer that a vehicle arrived at the pickup location
+        notifyObserver("Vehicle " + vehicle.getId() + " arrived at the pickup location");
     }
+
     
     @Override
     public void arrivedAtDropoffLocation(IVehicle vehicle) {
@@ -164,6 +184,26 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
         } while (!this.vehicles.get(index).isFree() || !this.vehicles.get(index).isPink());
 
         return index;
+    }
+    
+    //finds a vehicle close by that could share a ride
+    private int findFreeSharedVehicle(ILocation pickup) {
+    	Random random = new Random();
+    	for(int i = 0; i<this.vehicles.size(); ++i) {
+    		//if this vehicle is already in service, check its location
+    		if(!this.vehicles.get(i).isFree()) {
+    			ILocation location = this.vehicles.get(i).getLocation();
+    			if(ApplicationLibrary.distance(location, pickup) < -1) {
+    				//Randomize acceptance
+    				if(random.nextBoolean()) {
+    					return i;
+    				}		
+    			}
+    		}
+    		
+    	}
+    	
+    	return -1;
     }
 
     private int findUserIndex(int id) {

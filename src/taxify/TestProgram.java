@@ -18,18 +18,25 @@ public class TestProgram {
     	ApplicationSimulator simulator = new ApplicationSimulator(company, users, vehicles);
     	company.addObserver(simulator);
     	
-    	simulator.requestService(ServiceType.NORMAL);
     	int counter = 0;
-    	while(simulator.getTotalServices() > 0) {
+    	int nextServiceTime = 5;
+    	int simulationTime = 300;
+    	Random random = new Random();
+    	simulator.requestService();
+    	while(simulator.getTotalServices() > 0 || counter < simulationTime) {
     		simulator.update();
     		//simulator.show();
-    		if(counter % 21 == 0 && counter < 100) {
-    			simulator.requestService(ServiceType.SILENT);
+    		if(nextServiceTime == 0 && counter < simulationTime) {
+    			nextServiceTime = random.nextInt(10)+1;
+    			int serviceType = random.nextInt(4);
+    			if(serviceType == 0) {simulator.requestService(ServiceType.PINK);}
+    			else if(serviceType == 1) {simulator.requestService(ServiceType.SHARED);}
+    			else if(serviceType == 2) {simulator.requestService(ServiceType.SILENT);}
+    			else {simulator.requestService(ServiceType.NORMAL);}
     		}
-    		if(counter % 5 == 0 && counter < 100) {
-    			simulator.requestService(ServiceType.PINK);
-    		}
+    			
     		counter++;
+    		nextServiceTime--;
     	}	
     	simulator.showStatistics();
     	
@@ -76,10 +83,9 @@ public class TestProgram {
     	drivers.add(new Driver(15, "Henry", "Mitchell", 'M', LocalDate.of(2004, 3, 15)));
         return drivers;
     }
-    
+                        
     private static List<IVehicle> createVehicles(List<IDriver> drivers){
     	 List<IVehicle> vehicles = new ArrayList<>();
-         //use random location method
          for (int i = 1; i <= 10; i++) {
              ILocation location = ApplicationLibrary.randomLocation();
              if (i % 2 == 0) {
