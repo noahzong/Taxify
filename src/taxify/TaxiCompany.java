@@ -155,9 +155,7 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
             
             IService service = new Service(this.users.get(userIndex), origin, destination);
             
-            this.vehicles.get(vehicleIndex).pickService(service);
-
-                       
+            this.vehicles.get(vehicleIndex).pickService(service);               
             this.users.get(userIndex).setService(true);
 
 
