@@ -126,6 +126,58 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
         
         return false;
     }
+    
+    @Override
+    public boolean provideUserService(int user, UserVehicleType v) {
+        int userIndex = findUserIndex(user);        
+        int vehicleIndex;
+        
+        if(v == UserVehicleType.SCOOTER) {
+        	vehicleIndex = findFreeScooter();
+        }
+        else {
+        	vehicleIndex = findFreeBike();
+        }
+       
+        // if there is a free vehicle, assign a random pickup and drop-off location to the new service
+        // the distance between the pickup and the drop-off location should be at least 3 blocks
+        
+        if (vehicleIndex != -1) {
+            ILocation origin, destination;
+            
+            do {
+                
+                origin = ApplicationLibrary.randomLocation();
+                destination = ApplicationLibrary.randomLocation(origin);
+                
+            } while (ApplicationLibrary.distance(origin, this.vehicles.get(vehicleIndex).getLocation()) < ApplicationLibrary.MINIMUM_DISTANCE);
+            
+            
+            IService service = new Service(this.users.get(userIndex), origin, destination);
+            
+            this.vehicles.get(vehicleIndex).pickService(service);
+
+                       
+            this.users.get(userIndex).setService(true);
+
+
+            String message = String.format("User %s requests a service from %s, the ride is booked to %s %s at location %s",
+                this.users.get(userIndex).getId(),
+                service.toString(),
+                this.vehicles.get(vehicleIndex).getClass().getSimpleName(),
+                this.vehicles.get(vehicleIndex).getId(),
+                this.vehicles.get(vehicleIndex).getLocation().toString());
+
+            // Notify observer
+            notifyObserver(message);
+            // update the counter of services
+            
+            this.totalServices++;
+            return true;
+        }
+        
+        return false;
+    }
 
     @Override
     public void arrivedAtPickupLocation(IVehicle vehicle) {
@@ -209,6 +261,30 @@ public class TaxiCompany implements ITaxiCompany, ISubject {
     	}
     	
     	return -1;
+    }
+    
+    private int findFreeScooter() {
+        int index;
+        
+        do {
+            
+            index = ApplicationLibrary.rand(this.vehicles.size());
+            
+        } while (!this.vehicles.get(index).isFree() && !(this.vehicles.get(index).getType() == "Scooter"));
+
+        return index;
+    }
+    
+    private int findFreeBike() {
+        int index;
+        
+        do {
+            
+            index = ApplicationLibrary.rand(this.vehicles.size());
+            
+        } while (!this.vehicles.get(index).isFree() && !(this.vehicles.get(index).getType() == "Bike"));
+
+        return index;
     }
 
     private int findUserIndex(int id) {

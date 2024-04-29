@@ -35,6 +35,25 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
             
             String.format("%-8s", vehicle.getClass().getSimpleName()) +
             String.format("%2s", vehicle.getId()) + " " +
+            String.format("%2s", vehicle.getStatistics().getServices()) + " services " + 
+            String.format("%3s", vehicle.getStatistics().getDistance()) + " km. " +
+            String.format("%3s", vehicle.getStatistics().getBilling()) + " eur. ";
+        }
+                
+        System.out.println(s);        
+    }  
+    
+    @Override
+    public void showStatisticswithDriver() {
+        // show the statistics of the company
+        
+        String s = "\n" + this.company.getName() + " statistics \n";
+        
+        for (IVehicle vehicle : this.vehicles) {            
+            s = s + "\n" +
+            
+            String.format("%-8s", vehicle.getClass().getSimpleName()) +
+            String.format("%2s", vehicle.getId()) + " " +
             //add driver statistics
             "   Driver " +
             String.format("%-4s", vehicle.getDriver().toString()) +
@@ -77,6 +96,19 @@ public class ApplicationSimulator implements IApplicationSimulator, IObserver {
         } while (this.users.get(index).getService());
         
         this.company.provideService(this.users.get(index).getId(), s);
+    }
+    
+    @Override
+    public void requestUserService(UserVehicleType v) {
+    	int index;
+        
+        do {
+            
+            index = ApplicationLibrary.rand(this.users.size());;
+            
+        } while (this.users.get(index).getService());
+        
+        this.company.provideUserService(this.users.get(index).getId(), v);
     }
     
     @Override

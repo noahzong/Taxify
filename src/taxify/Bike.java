@@ -1,16 +1,16 @@
 package project1.src.taxify;
 
-public class Taxi extends DriverVehicle {
-	public Taxi(int id, ILocation location) {
+public class Bike extends UserVehicle {
+	public Bike(int id, ILocation location) {
 		super(id, location);
 	}
 	
 	public String getType() {
-		return "Taxi";
+		return "Bike";
 	}
 	
 	@Override
 	public int calculateCost() {
-		return 4*super.calculateCost();
+		return super.calculateCost()/2;
 	}
 }

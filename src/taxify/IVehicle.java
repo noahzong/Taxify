@@ -4,6 +4,9 @@ public interface IVehicle extends IMovable {
 
     public int getId();
     public boolean isPink();
+    public IDriver getDriver();
+    public void setDriver(IDriver driver);
+    public String getType();
     public ILocation getLocation();
     public ILocation getDestination();
     public IService getService();
@@ -11,8 +14,6 @@ public interface IVehicle extends IMovable {
     public void setCompany(ITaxiCompany company);
     public void pickService(IService service);
     public void pickSharedService(IService service);
-    public IDriver getDriver();
-    public void setDriver(IDriver d);
     public void startService();
     public void endService();
     public void notifyArrivalAtPickupLocation();
@@ -20,6 +21,10 @@ public interface IVehicle extends IMovable {
     public boolean isFree();
     public int calculateCost();
     public String toString();
+	
+	
+	
+	
 	
     
 }

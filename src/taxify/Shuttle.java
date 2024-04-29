@@ -1,8 +1,12 @@
 package project1.src.taxify;
 
-public class Shuttle extends Vehicle {
+public class Shuttle extends DriverVehicle {
 	public Shuttle(int id, ILocation location) {
 		super(id, location);
+	}
+	
+	public String getType() {
+		return "Shuttle";
 	}
 	
 	@Override

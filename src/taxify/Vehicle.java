@@ -1,16 +1,15 @@
 package project1.src.taxify;
 
 public abstract class Vehicle implements IVehicle {
-    private int id;
+    protected int id;
     private ITaxiCompany company;
-    private IService service;
-    private IService sharedService;
-    private VehicleStatus status;
-    private ILocation location;
-    private ILocation destination;
-    private IStatistics statistics;
-    private IRoute route;
-    private IDriver driver;
+    protected IService service;
+    protected IService sharedService;
+    protected VehicleStatus status;
+    protected ILocation location;
+    protected ILocation destination;
+    protected IStatistics statistics;
+    protected IRoute route;
         
     public Vehicle(int id, ILocation location) {        
         this.id = id;
@@ -29,9 +28,19 @@ public abstract class Vehicle implements IVehicle {
     
     @Override
     public boolean isPink() {
-    	return this.driver.getGender() == 'F';
+    	return true;
     }
  
+    @Override
+    public IDriver getDriver() {
+    	return null;
+    }
+    
+    @Override
+	public void setDriver(IDriver driver) {
+    	return;
+    }
+    
     @Override
     public ILocation getLocation() {
         return this.location;
@@ -76,20 +85,10 @@ public abstract class Vehicle implements IVehicle {
         this.route = new Route(this.location, this.destination);        
         this.status = VehicleStatus.PICKUP;
     }
-    
-    @Override
-    public IDriver getDriver() {
-    	return this.driver;
-    }
-    
-    public void setDriver(IDriver driver) {
-    	this.driver = driver;
-    }
 
     @Override
     public void startService() {
         // set destination to the service drop-off location, and status to "service"
-    	
     	this.destination = service.getDropoffLocation();
     	this.route = new Route(this.location, this.destination);
     	this.status = VehicleStatus.SERVICE;
@@ -112,14 +111,6 @@ public abstract class Vehicle implements IVehicle {
             this.statistics.updateReviews();
         }
         
-        //if it was a shared service, add extra statistics
-        if(this.sharedService != null) {
-        	this.statistics.updateServices();
-        	if (this.service.getStars() != 0) {
-                this.statistics.updateStars(this.service.getStars());
-                this.statistics.updateReviews();
-            }
-        }
         // set service to null, and status to "free"
         
         this.service = null;
@@ -152,7 +143,6 @@ public abstract class Vehicle implements IVehicle {
     @Override
     public void move() {
         // get the next location from the driving route
-        
         this.location = this.route.getNextLocation();        
         
         // if the route has more locations the vehicle continues its route, otherwise the vehicle has arrived to a pickup or drop off location
@@ -160,7 +150,6 @@ public abstract class Vehicle implements IVehicle {
         if (!this.route.hasLocations()) {
             if (this.service == null) {
                 // the vehicle continues its random route
-
                 this.destination = ApplicationLibrary.randomLocation(this.location);
                 this.route = new Route(this.location, this.destination);
             }
@@ -169,7 +158,7 @@ public abstract class Vehicle implements IVehicle {
 
                 ILocation origin = this.service.getPickupLocation();
                 ILocation destination = this.service.getDropoffLocation();
-
+                System.out.println(origin);
                 if (this.location.getX() == origin.getX() && this.location.getY() == origin.getY()) {
 
                     notifyArrivalAtPickupLocation();

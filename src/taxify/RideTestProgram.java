@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class TestProgram {
+public class RideTestProgram {
 	
     public static void main(String[] args) {
         List<IUser> users = createUsers();
@@ -30,20 +30,20 @@ public class TestProgram {
     			nextServiceTime = random.nextInt(10)+1;
     			int serviceType = random.nextInt(4);
     			if(serviceType == 0) {simulator.requestService(ServiceType.PINK);}
-    			//else if(serviceType == 1) {simulator.requestService(ServiceType.PINK);}
-    			//else if(serviceType == 2) {simulator.requestService(ServiceType.PINK);}
-    			//else {simulator.requestService(ServiceType.PINK);}
+    		//	else if(serviceType == 1) {simulator.requestService(ServiceType.SILENT);}
+    		//	else if(serviceType == 2) {simulator.requestService(ServiceType.SHARED);}
+    		//	else {simulator.requestService(ServiceType.NORMAL);}
     		}
     			
     		counter++;
     		nextServiceTime--;
     	}	
-    	simulator.showStatistics();
+    	simulator.showStatisticswithDriver();
     	
     }
 
     
-    private static List<IUser> createUsers(){
+    public static List<IUser> createUsers(){
     	List<IUser> users = new ArrayList<IUser>();
         users.add(new User(11, "John", "Doe", 'M', LocalDate.of(1990, 1, 1)));
         users.add(new User(21, "Jane", "Smith", 'F', LocalDate.of(1991, 2, 2)));
@@ -64,7 +64,7 @@ public class TestProgram {
         return users; 
     }
 
-    private static List<IDriver> createDrivers(){
+    public static List<IDriver> createDrivers(){
     	List<IDriver> drivers = new ArrayList<>();
     	drivers.add(new Driver(1, "Alex", "Kim", 'M', LocalDate.of(1990, 1, 1)));
     	drivers.add(new Driver(2, "Eva", "Lee", 'F', LocalDate.of(1991, 2, 2)));
@@ -84,7 +84,7 @@ public class TestProgram {
         return drivers;
     }
                         
-    private static List<IVehicle> createVehicles(List<IDriver> drivers){
+    public static List<IVehicle> createVehicles(List<IDriver> drivers){
     	 List<IVehicle> vehicles = new ArrayList<>();
          for (int i = 1; i <= 10; i++) {
              ILocation location = ApplicationLibrary.randomLocation();
